@@ -82,6 +82,7 @@ bool UPlayerComponent::CheckMaxStone(int Stone)
 {
 	if (Stone > MaxStoneAmount)
 	{
+		StoneAmount = MaxStoneAmount;
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Maximum Stone Amount Reached: %d Stone"), StoneAmount));
 		return false;
@@ -93,6 +94,7 @@ bool UPlayerComponent::CheckMaxWood(int Wood)
 {
 	if (Wood > MaxWoodAmount)
 	{
+		WoodAmount = MaxWoodAmount;
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Maximum Wood Amount Reached: %d Wood"), WoodAmount));
 		return false;

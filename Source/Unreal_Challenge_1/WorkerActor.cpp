@@ -1,6 +1,5 @@
 #include "WorkerActor.h"
 #include "PlayerComponent.h"
-#include "PlayerPawn.h"
 #include "GameFramework/Actor.h"
 #include "Components/SkeletalMeshComponent.h"
 
@@ -137,7 +136,7 @@ bool AWorkerActor::GetIsActive()
 
 void AWorkerActor::LevelUp()
 {
-    UPlayerComponent* thePlayer = Cast<UPlayerComponent>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    UPlayerComponent* thePlayer = PlayerRef->FindComponentByClass<UPlayerComponent>();
     int WoodAmount = thePlayer->GetWoodAmount();
     int StoneAmount = thePlayer->GetStoneAmount();
 
@@ -212,7 +211,7 @@ void AWorkerActor::LevelUp()
 
 void AWorkerActor::AddResources()
 {
-    APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    UPlayerComponent* thePlayer = PlayerRef->FindComponentByClass<UPlayerComponent>();
 
     if (bResourceType)
     {

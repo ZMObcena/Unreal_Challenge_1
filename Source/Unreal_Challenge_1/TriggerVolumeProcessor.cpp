@@ -4,7 +4,6 @@
 #include "TriggerVolumeProcessor.h"
 #include "TimerManager.h"
 #include "GameFramework/Actor.h"
-#include "PlayerPawn.h"
 #include "WorkerActor.h"
 
 // Sets default values for this component's properties
