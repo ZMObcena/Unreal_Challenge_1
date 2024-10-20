@@ -3,6 +3,7 @@
 
 #include "TriggerVolumeProcessor.h"
 #include "TimerManager.h"
+#include "GameFramework/Actor.h"
 #include "PlayerPawn.h"
 #include "WorkerActor.h"
 
@@ -28,12 +29,10 @@ void UTriggerVolumeProcessor::BeginPlay()
 void UTriggerVolumeProcessor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-
+	
 	AWorkerActor* OwnerActor = Cast<AWorkerActor>(GetOwner());
 
-    if (bCanInteract && this->TriggerVol->IsOverlappingActor(thePlayer))
+    if (bCanInteract && this->TriggerVol->IsOverlappingActor(PlayerRef))
 	{
 		if (!OwnerActor->GetIsActive())
 		{

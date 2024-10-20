@@ -1,5 +1,7 @@
 #include "WorkerActor.h"
+#include "PlayerComponent.h"
 #include "PlayerPawn.h"
+#include "GameFramework/Actor.h"
 #include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
@@ -80,7 +82,7 @@ void AWorkerActor::InitializeStats()
 
 void AWorkerActor::ActivateWorker()
 {
-    APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    UPlayerComponent* thePlayer = PlayerRef->FindComponentByClass<UPlayerComponent>();
     int WoodAmount = thePlayer->GetWoodAmount();
     int StoneAmount = thePlayer->GetStoneAmount();
 
@@ -135,7 +137,7 @@ bool AWorkerActor::GetIsActive()
 
 void AWorkerActor::LevelUp()
 {
-    APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    UPlayerComponent* thePlayer = Cast<UPlayerComponent>(GetWorld()->GetFirstPlayerController()->GetPawn());
     int WoodAmount = thePlayer->GetWoodAmount();
     int StoneAmount = thePlayer->GetStoneAmount();
 

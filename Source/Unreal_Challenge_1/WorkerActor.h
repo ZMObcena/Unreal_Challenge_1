@@ -34,6 +34,9 @@ private:
     int StoneGatherRate;
     int LevelCost;
 
+    UPROPERTY(EditAnywhere, Category = "PlayerReference")
+    AActor* PlayerRef;
+
     UPROPERTY(EditAnywhere, Category = "RootSceneComponent")
     USceneComponent* RootSceneComponent;
 
