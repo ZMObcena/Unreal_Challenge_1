@@ -68,19 +68,43 @@ void APlayerPawn::BuySilo()
 {
 	MaxStoneAmount += 25;
 	MaxWoodAmount += 100;
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Maximum Wood Amount Increased: %d/%d Wood"), WoodAmount, MaxWoodAmount));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Maximum Stone Amount Increased: %d/%d Stone"), StoneAmount, MaxStoneAmount));
+	}
+}
+
+int APlayerPawn::GetMaxStoneAmount()
+{
+	return MaxStoneAmount;
+}
+
+int APlayerPawn::GetMaxWoodAmount()
+{
+	return MaxWoodAmount;
 }
 
 bool APlayerPawn::CheckMaxStone(int Stone)
 {
 	if (Stone > MaxStoneAmount)
+	{
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Maximum Stone Amount Reached: %d Stone"), StoneAmount));
 		return false;
+	}
 	return true;
 }
 
 bool APlayerPawn::CheckMaxWood(int Wood)
 {
 	if (Wood > MaxWoodAmount)
+	{
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Maximum Wood Amount Reached: %d Wood"), WoodAmount));
 		return false;
+	}
 	return true;
 }
 

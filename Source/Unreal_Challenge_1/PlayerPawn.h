@@ -27,27 +27,25 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void SetStoneAmount(int Amount);
-
 	int GetStoneAmount();
 
 	void SetWoodAmount(int Amount);
-
 	int GetWoodAmount();
 
 	int StoneAmount;
-
 	int WoodAmount;
 
 	int SiloCount;
 
 	int MaxStoneAmount;
+	int GetMaxStoneAmount();
 
 	int MaxWoodAmount;
+	int GetMaxWoodAmount();
 
 	void BuySilo();
 
 	bool CheckMaxStone(int Stone);
-
 	bool CheckMaxWood(int Wood);
 
 private:

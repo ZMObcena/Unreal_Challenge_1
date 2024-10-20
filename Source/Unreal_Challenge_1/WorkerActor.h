@@ -52,11 +52,14 @@ private:
     float MovementSpeed;
 
     // Worker stats
+    UPROPERTY(EditAnywhere, Category = "ResourceType");
+    bool bResourceType;
+
+    UPROPERTY(EditAnywhere, Category = "ResourceType");
+    bool bActivateAtStart;
+
     int Level;
     bool bIsActive;
 
-    UPROPERTY(EditAnywhere, Category = "ResourceType") // 0 = Wood, 1 = Stone
-    bool bResourceType;
-
-    void AddResources(bool bType);
+    void AddResources();
 };

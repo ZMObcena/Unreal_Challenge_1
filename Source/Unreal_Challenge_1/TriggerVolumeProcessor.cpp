@@ -37,7 +37,6 @@ void UTriggerVolumeProcessor::TickComponent(float DeltaTime, ELevelTick TickType
 	{
 		if (!OwnerActor->GetIsActive())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Worker Activated"));
 			OwnerActor->ActivateWorker();
 			bCanInteract = false;
 			GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, this, &UTriggerVolumeProcessor::ResetCooldown, 5.0f, false);
@@ -45,6 +44,7 @@ void UTriggerVolumeProcessor::TickComponent(float DeltaTime, ELevelTick TickType
 		else
 		{
 			OwnerActor->LevelUp();
+			bCanInteract = false;
 			GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, this, &UTriggerVolumeProcessor::ResetCooldown, 5.0f, false);
 		}
     }
