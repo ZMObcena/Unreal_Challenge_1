@@ -1,4 +1,5 @@
 #include "WorkerActor.h"
+#include "PlayerPawn.h"
 #include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
@@ -15,7 +16,7 @@ AWorkerActor::AWorkerActor()
     WorkerMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WorkerMesh"));
     WorkerMesh->SetupAttachment(RootSceneComponent); 
 
-    //InitializeStats();
+    InitializeStats();
 }
 
 // Called when the game starts or when spawned
@@ -35,35 +36,37 @@ void AWorkerActor::Tick(float DeltaTime)
     }
 }
 
-// Function to set reference to ResourcesDataActor
-void AWorkerActor::SetResourcesDataActor(AResourcesDataActor* ResourcesActor)
-{
-    if (ResourcesActor)
-    {
-        ResourcesDataActorRef = ResourcesActor;
-    }
-}
-
 void AWorkerActor::InitializeStats()
 {
-    // Initialize gathering rates
-    WoodGatherRates.Add(1, 10);
-    WoodGatherRates.Add(2, 15);
-    WoodGatherRates.Add(3, 20);
-    WoodGatherRates.Add(4, 25);
-    WoodGatherRates.Add(5, 30);
+    if (Level == 1)
+    {
+        WoodGatherRate = 10;
+        StoneGatherRate = 4;
+    }
 
-    StoneGatherRates.Add(1, 4);
-    StoneGatherRates.Add(2, 8);
-    StoneGatherRates.Add(3, 12);
-    StoneGatherRates.Add(4, 16);
-    StoneGatherRates.Add(5, 20);
+    else if (Level == 2)
+    {
+        WoodGatherRate = 15;
+        StoneGatherRate = 8;
+    }
 
-    // Initialize costs
-    LevelCosts.Add(2, { {"Wood", 10}, {"Stone", 10} });
-    LevelCosts.Add(3, { {"Wood", 15}, {"Stone", 10} });
-    LevelCosts.Add(4, { {"Wood", 20}, {"Stone", 15} });
-    LevelCosts.Add(5, { {"Wood", 30}, {"Stone", 20} });
+    else if (Level == 3)
+    {
+        WoodGatherRate = 20;
+        StoneGatherRate = 12;
+    }
+
+    else if (Level == 4)
+    {
+        WoodGatherRate = 25;
+        StoneGatherRate = 16;
+    }
+
+    else
+    {
+        WoodGatherRate = 30;
+        StoneGatherRate = 20;
+    }
 }
 
 void AWorkerActor::ActivateWorker()
@@ -99,50 +102,67 @@ void AWorkerActor::GatherResources()
     }
 }
 
-float AWorkerActor::GetWoodGatherRate()
-{
-    return WoodGatherRates[Level];
-}
-
-float AWorkerActor::GetStoneGatherRate()
-{
-    return StoneGatherRates[Level];
-}
-
 bool AWorkerActor::GetIsActive()
 {
     return bIsActive;
 }
 
-bool AWorkerActor::LevelUp()
+void AWorkerActor::LevelUp()
 {
-    if (ResourcesDataActorRef)
+    APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+    int WoodAmount = thePlayer->GetWoodAmount();
+    int StoneAmount = thePlayer->GetStoneAmount();
+
+    if (Level == 1)
     {
-        TMap<FString, int32> LevelCost = LevelCosts[Level + 1];
-        if (ResourcesDataActorRef->GetWoodAmount() >= LevelCost["Wood"] && ResourcesDataActorRef->GetStoneAmount() >= LevelCost["Stone"])
+        if (WoodAmount == 10 && StoneAmount == 10)
         {
-            ResourcesDataActorRef->SetWoodAmount(ResourcesDataActorRef->GetWoodAmount() - LevelCost["Wood"]);
-            ResourcesDataActorRef->SetStoneAmount(ResourcesDataActorRef->GetStoneAmount() - LevelCost["Stone"]);
             Level++;
-            return true;
+            InitializeStats();
+
         }
     }
-    return false;
+
+    else if (Level == 2)
+    {
+        if (WoodAmount == 15 && StoneAmount == 10)
+        {
+            Level++;
+            InitializeStats();
+        }
+    }
+
+    else if (Level == 3)
+    {
+        if (WoodAmount == 20 && StoneAmount == 15)
+        {
+            Level++;
+            InitializeStats();
+        }
+    }
+
+    else
+    {
+        if (WoodAmount == 30 && StoneAmount == 20)
+        {
+            Level++;
+            InitializeStats();
+        }
+    }
 }
 
 void AWorkerActor::AddResources(bool bType)
 {
-    float WoodGathered = GetWoodGatherRate();
-    float StoneGathered = GetStoneGatherRate();
+    APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
     if (bType)
     {
-        ResourcesDataActorRef->SetWoodAmount(ResourcesDataActorRef->GetWoodAmount() + WoodGathered);
+        if(thePlayer->CheckMaxWood(thePlayer->GetWoodAmount() + WoodGatherRate))
+            thePlayer->SetWoodAmount(thePlayer->GetWoodAmount() + WoodGatherRate);
     }
-
-    // Add stone
     else
     {
-        ResourcesDataActorRef->SetWoodAmount(ResourcesDataActorRef->GetStoneAmount() + StoneGathered);
+        if (thePlayer->CheckMaxStone(thePlayer->GetStoneAmount() + StoneGatherRate))
+            thePlayer->SetWoodAmount(thePlayer->GetStoneAmount() + StoneGatherRate);
     }
 }

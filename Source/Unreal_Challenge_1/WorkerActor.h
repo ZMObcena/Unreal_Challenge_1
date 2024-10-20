@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ResourcesDataActor.h"
 #include "WorkerActor.generated.h"
 
 UCLASS()
@@ -20,29 +19,20 @@ protected:
 public:
     virtual void Tick(float DeltaTime) override;
 
-    void SetResourcesDataActor(AResourcesDataActor* ResourcesActor);
-
     void InitializeStats();
 
     void ActivateWorker();
 
     void GatherResources();
 
-    bool LevelUp();
-
-    float GetWoodGatherRate();
-
-    float GetStoneGatherRate();
+    void LevelUp();
 
     bool GetIsActive();
 
 private:
-    AResourcesDataActor* ResourcesDataActorRef;
-
-    // Gathering rates and costs
-    TMap<int32, float> WoodGatherRates;
-    TMap<int32, float> StoneGatherRates;
-    TMap<int32, TMap<FString, int32>> LevelCosts;
+    int WoodGatherRate;
+    int StoneGatherRate;
+    int LevelCost;
 
     UPROPERTY(EditAnywhere, Category = "RootSceneComponent")
     USceneComponent* RootSceneComponent;
@@ -62,7 +52,7 @@ private:
     float MovementSpeed;
 
     // Worker stats
-    int32 Level;
+    int Level;
     bool bIsActive;
 
     UPROPERTY(EditAnywhere, Category = "ResourceType") // 0 = Wood, 1 = Stone

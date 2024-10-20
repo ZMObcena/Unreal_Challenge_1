@@ -3,6 +3,7 @@
 
 #include "TriggerVolumeProcessor.h"
 #include "TimerManager.h"
+#include "PlayerPawn.h"
 #include "WorkerActor.h"
 
 // Sets default values for this component's properties
@@ -28,7 +29,7 @@ void UTriggerVolumeProcessor::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	APawn* thePlayer = this->GetWorld()->GetFirstPlayerController()->GetPawn();
+	APlayerPawn* thePlayer = Cast<APlayerPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
 	AWorkerActor* OwnerActor = Cast<AWorkerActor>(GetOwner());
 
@@ -36,17 +37,15 @@ void UTriggerVolumeProcessor::TickComponent(float DeltaTime, ELevelTick TickType
 	{
 		if (!OwnerActor->GetIsActive())
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Worker Activated"));
 			OwnerActor->ActivateWorker();
 			bCanInteract = false;
 			GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, this, &UTriggerVolumeProcessor::ResetCooldown, 5.0f, false);
 		}
 		else
 		{
-			if (OwnerActor->LevelUp())
-			{
-				bCanInteract = false;
-				GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, this, &UTriggerVolumeProcessor::ResetCooldown, 5.0f, false);
-			}
+			OwnerActor->LevelUp();
+			GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, this, &UTriggerVolumeProcessor::ResetCooldown, 5.0f, false);
 		}
     }
 }
